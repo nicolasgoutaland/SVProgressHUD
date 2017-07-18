@@ -124,7 +124,11 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 
 + (void)setDefaultStyle:(SVProgressHUDStyle)style {
     [self sharedView].defaultStyle = style;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    [self sharedView].hudView.contentView.alpha = style != SVProgressHUDStyleCustom ? 1.0f : 0.0f;
+#else
     [self sharedView].hudView.alpha = style != SVProgressHUDStyleCustom ? 1.0f : 0.0f;
+#endif
 }
 
 + (void)setDefaultMaskType:(SVProgressHUDMaskType)maskType {
@@ -952,11 +956,10 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
                 self.hudView.contentView.alpha = 1.0f;
             } else {
                 // This gives a warning on iOS 8, however it works, see #703
-                self.hudView.alpha = 1.0f;
+                self.hudView.contentView.alpha = 1.0f;
             }
 #else
             self.hudView.alpha = 1.0f;
-            self.hudView.contentView.alpha = 1.0f;
 #endif
             self.backgroundView.alpha = 1.0f;
         };
@@ -1037,11 +1040,10 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
                     strongSelf.hudView.contentView.alpha = 0.0f;
                 } else {
                     // This gives a warning on iOS 8, however it works, see #703
-                    strongSelf.hudView.alpha = 0.0f;
+                    strongSelf.hudView.contentView.alpha = 0.0f;
                 }
 #else
                 strongSelf.hudView.alpha = 0.0f;
-                strongSelf.hudView.contentView.alpha = 0.0f;
 #endif
                 strongSelf.backgroundView.alpha = 0.0f;
             };
